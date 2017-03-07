@@ -4,18 +4,20 @@
         private $title;
         private $type;
         private $id;
-        private $player_id;
+        private $user_id;
         private $champion;
         private $champ_score;
+        private $tiles;
 
-        function __construct($title, $type, $id = null, $player_id = null, $champion = null, $champ_score = null)
+        function __construct($title, $type, $id = null, $user_id = null, $champion = null, $champ_score = null, $tiles = null)
         {
             $this->title = (string) $title;
             $this->type = (int) $type;
             $this->id = $id;
-            $this->player_id = $player_id;
+            $this->user_id = $user_id;
             $this->champion = $champion;
             $this->champ_score = $champ_score;
+            $this->tiles = $tiles;
         }
 
         function getId()
@@ -43,14 +45,24 @@
             $this->type = (int) $new_type;
         }
 
-        function getPlayerId()
+        function getTiles()
         {
-            return $this->player_id;
+            return $this->tiles;
         }
 
-        function setPlayerId($new_player_id)
+        function setTiles($new_tiles)
         {
-            $this->player_id = (int) $new_player_id;
+            $this->tiles = $new_tiles;
+        }
+
+        function getUserId()
+        {
+            return $this->user_id;
+        }
+
+        function setUserId($new_user_id)
+        {
+            $this->user_id = (int) $new_user_id;
         }
 
         function getChampion()
@@ -75,7 +87,55 @@
 
         function save()
         {
-            
+            $GLOBALS['DB']->exec("INSERT INTO maps (title, type, user_id, champion, champ_score) VALUES ('{$this->getTitle()}', {$this->getType()}, {$this->getUserId()}, {$this->getChampion()}, {$this->getChampScore()});");
+            $this->id = $GLOBALS['DB']->lastInsertId();
+
+            foreach($this->tiles as $tile){
+                $GLOBALS['DB']->exec("INSERT INTO map_coordinates (map_id, x, y, player_int) VALUES ({$this->getId()}, {$tile[0]}, {$tile[1]}, {$tile[2]});");
+            }
+        }
+
+        function getCoordinates()
+        {
+            $tiles = [];
+            $coords = $GLOBALS['DB']->query("SELECT * FROM map_coordinates WHERE map_id = {$this->getId()};");
+            foreach($coords as $tile)
+            {
+                array_push($tiles, [$tile['x'], $tile['y'], $tile['player_int']]);
+            }
+            return $tiles;
+        }
+
+        function delete()
+        {
+            $GLOBALS['DB']->exec("DELETE FROM maps WHERE id={$this->getId()};");
+            $GLOBALS['DB']->exec("DELETE FROM map_coordinates WHERE map_id={$this->getId()};");
+
+        }
+
+        static function find($id)
+        {
+            return $GLOBALS['DB']->query("SELECT FROM maps WHERE id={$id};")->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, "Map", ['title', 'type', 'id', 'user_id', 'champion', 'champ_score'])[0];//may need to break apart
+        }
+
+        static function getAll()
+        {
+            $maps = [];
+
+            $returned_maps = $GLOBALS['DB']->query("SELECT * FROM maps;");
+            foreach($returned_maps as $map)
+            {
+                $new_map = new Map($map['title'], $map['type'], $map['id'], $map['user_id'], $map['champion'], $map['champ_score']);
+                array_push($maps, $new_map);
+            }
+            return $maps;
+        }
+
+        static function deleteAll()
+        {
+            $GLOBALS['DB']->exec("DELETE FROM maps;");
+            $GLOBALS['DB']->exec("DELETE FROM map_coordinates;");
+
         }
 
     }
