@@ -1,5 +1,5 @@
 function Game() {
-    this.board = new Board(100,100)
+    this.board = new Board(10,10)
     this.log = [];
     this.playerArray = [new Player(0,"string"), new Player(1,"potato")];
     this.activePlayer = 0;
@@ -192,7 +192,7 @@ Tile.prototype.draw = function(ctx) {
     if(this.active) {
         ctx.fill();
     }
-    // ctx.stroke();
+    ctx.stroke();
     ctx.closePath();
 }
 
