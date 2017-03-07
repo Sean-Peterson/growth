@@ -13,14 +13,13 @@ function Game() {
 
 }
 Game.prototype.endGame = function() {
-  console.log("GAME OVER Player 1 score: "+this.playerArray[0].score+" player2score: "+this.playerArray[1].score);
     if(((this.board.x * this.board.y) - this.playerArray[2].score) === (this.playerArray[0].score + this.playerArray[1].score)){
         if(this.playerArray[0].score > this.playerArray[1].score) {
             this.winner = 0;
         } else {
             this.winner = 1;
         }
-        $("#end-game").text("GAME OVER Player 1 score: "+this.playerArray[0].score+" player2score: "+this.playerArray[1].score);
+        $("#end-game").text("GAME OVER Player 1 score: "+this.playerArray[0].score+" Player 2 score: "+this.playerArray[1].score);
 
     }
 }
@@ -44,7 +43,6 @@ Game.prototype.playerClick = function(canvas) {
         // game.historyArray[game.board.grid[x][y].player].push([x,y]);
 
       }
-      console.log(x + ", " + y);
     });
     $("canvas").mousedown(function(){//IMPERATIVE
       $('canvas').mousemove(function(e){//DANGER SEE IMPERATIVES
@@ -64,7 +62,6 @@ Game.prototype.playerClick = function(canvas) {
           // game.historyArray[game.board.grid[x][y].player].push([x,y]);
 
         }
-        console.log(x + ", " + y);
       });
 
     });
