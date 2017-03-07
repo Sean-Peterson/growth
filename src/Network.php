@@ -10,7 +10,8 @@
             $this->num_layers = sizeof($sizes);
             $this->sizes = $sizes;
             $this->biases = [];
-            for($i = 0; $i<$this->num_layers; $i++) {
+
+            for($i = 0; $i<$this->num_layers-1; $i++) {
                 array_push($this->biases, []);
                 for($j = 0; $j<$sizes[$i]; $j++) {
                     array_push($this->biases[$i], rand(0,10000)/10000);
@@ -19,26 +20,33 @@
 
             $this->activations = [];
             for($i = 0; $i<$this->num_layers; $i++) {
-                array_push($this->biases, []);
+                array_push($this->activations, []);
                 for($j = 0; $j<$sizes[$i]; $j++) {
-                    array_push($this->biases[$i], 0);
+                    array_push($this->activations[$i], 0);
                 }
             }
 
             $this->weights = [];
-            for($i = 0; $i<sizeof($sizes)-1; $i++) {
+            for($i = 0; $i<$this->num_layers-1; $i++) {
                 array_push($this->weights, []);
-                for($j = 0; $j<$sizes[$i]; $j++) {
-                    array_push($this->weights[$i], rand(-10000,10000)/10000);
+                for($j = 0; $j<$sizes[$i+1]; $j++) {
+                    array_push($this->weights[$i], []);
+                    for($k = 0; $k<$sizes[$i]; $k++){
+                        array_push($this->weights[$i][$j], rand(-10000,10000)/10000);
+                    }
                 }
             }
         }
 
 
         function feedforward($a){
-            for($i = 0; $i<sizeof($this->sizes); $i++) {
-                for($j = 0; $j<sizeof($this->size[$i]); $j++) {
-                    $a = Network::sigmoid(Network::dot($this->weights[$i][$j], $a)+$this->biases[$i][$j]);
+            for ($i = 0; $i<$this->size[0]; $i++) {
+                $this->activations[0][$i] = $a[$i];
+            }
+
+            for ($i = 1; $i<$this->num_layers; $i++){
+                for($j = 0; $j<($sizes[$i]); $j++){
+                    $activations[$i][$j] = Network::sigmoid(Network::dot($this->weights[$i-1][$j], $this->activations[$i-1])+$this->bias[$i][$j]);
                 }
             }
         }
@@ -48,7 +56,8 @@
 
 
         static function sigmoid($z) {
-            return 1.0/(1.0+exp(-$z));
+            $value =  1.0/(1.0+exp(-$z));
+            return $value;
         }
 
         static function dot($array1, $array2){

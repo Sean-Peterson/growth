@@ -1,5 +1,5 @@
 function Game() {
-    this.board = new Board(10,10)
+    this.board = new Board(100,100)
     this.log = [];
     this.playerArray = [new Player(0,"string"), new Player(1,"potato")];
     this.activePlayer = 0;
@@ -57,10 +57,10 @@ Board.prototype.grow = function(game) {
     var coords = [];
     for (var i=1;i<this.x-1;i++) {
         for (var j=1;j<this.y-1;j++) {
-            // if((this.grid[i][j+1].active && this.grid[i][j-1].active && this.grid[i+1][j].active && this.grid[i-1][j].active) && (this.grid[i][j+1].player === this.grid[i][j-1].player && this.grid[i+1][j].player === this.grid[i-1][j].player)) {
-            //     this.grid[i][j].active = true;
-            //     this.grid[i][j].player = this.grid[i][j+1].player;
-            // }
+            if((this.grid[i][j+1].active && this.grid[i][j-1].active && this.grid[i+1][j].active && this.grid[i-1][j].active) && (this.grid[i][j+1].player === this.grid[i][j-1].player && this.grid[i+1][j].player === this.grid[i-1][j].player)) {
+                this.grid[i][j].active = true;
+                this.grid[i][j].player = this.grid[i][j+1].player;
+            }
             if(this.grid[i][j].active){
                 this.grid[i][j].age ++;
                 // if(i>0 && i < this.x-1 && j>0 && j<this.y-1) {
