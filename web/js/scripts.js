@@ -1,11 +1,11 @@
 var seed = Math.random();
-
+var erase = false;
 
 function Game() {
-    this.board = new Board(100,100)
+    this.board = new Board(25,25)
     this.log = [];
-    this.playerArray = [new Player(0,"string"), new Player(1,"potato"), new Player(2, "wall")];
-    this.activePlayer = 0;
+    this.playerArray = [new Player(0,"string"), new Player(1,"potato"), new Player(2, "wall"), new Player(3, "string")];
+    this.activePlayer = 3;
     this.run = false;
     this.historyArray = [[],[]];
     this.winner = 0;
@@ -13,6 +13,7 @@ function Game() {
 
 }
 Game.prototype.endGame = function() {
+  console.log("GAME OVER Player 1 score: "+this.playerArray[0].score+" player2score: "+this.playerArray[1].score);
     if(((this.board.x * this.board.y) - this.playerArray[2].score) === (this.playerArray[0].score + this.playerArray[1].score)){
         if(this.playerArray[0].score > this.playerArray[1].score) {
             this.winner = 0;
@@ -26,6 +27,25 @@ Game.prototype.endGame = function() {
 
 Game.prototype.playerClick = function(canvas) {
     var game = this;
+    $("canvas").click(function(e){
+      var bb = canvas.getBoundingClientRect();
+      var x = e.clientX - bb.left;
+      var y = e.clientY - bb.top;
+      x = Math.floor(x/(500/game.board.x));
+      y = Math.floor(y/(500/game.board.y));
+      if(erase) {
+        game.board.grid[x][y].active = false;
+        game.playerArray[game.board.grid[x][y].player].score --;
+        game.board.grid[x][y].player = 3;
+      }else if(!(game.board.grid[x][y].active)){
+        game.board.grid[x][y].active = true;
+        game.board.grid[x][y].player = game.activePlayer;
+        game.playerArray[game.board.grid[x][y].player].score ++;
+        // game.historyArray[game.board.grid[x][y].player].push([x,y]);
+
+      }
+      console.log(x + ", " + y);
+    });
     $("canvas").mousedown(function(){//IMPERATIVE
       $('canvas').mousemove(function(e){//DANGER SEE IMPERATIVES
         var bb = canvas.getBoundingClientRect();
@@ -33,13 +53,18 @@ Game.prototype.playerClick = function(canvas) {
         var y = e.clientY - bb.top;
         x = Math.floor(x/(500/game.board.x));
         y = Math.floor(y/(500/game.board.y));
-        if(!(game.board.grid[x][y].active)){
+        if(erase) {
+          game.board.grid[x][y].active = false;
+          game.playerArray[game.board.grid[x][y].player].score --;
+          game.board.grid[x][y].player = 3;
+        }else if(!(game.board.grid[x][y].active)){
           game.board.grid[x][y].active = true;
           game.board.grid[x][y].player = game.activePlayer;
           game.playerArray[game.board.grid[x][y].player].score ++;
           // game.historyArray[game.board.grid[x][y].player].push([x,y]);
 
         }
+        console.log(x + ", " + y);
       });
 
     });
@@ -49,19 +74,19 @@ Game.prototype.playerClick = function(canvas) {
 };
 
 Game.prototype.generateWalls = function(canvas){
-  this.activePlayer = 2;
-  var x = this.board.x-1;
-  var y = this.board.y-1;
-  for (var i=0;i<this.board.x;i++) {
-      for (var j=0;j<this.board.y;j++) {
-        if(seed > Math.random() && !(this.board.grid[x][y].active)){
-          this.board.grid[x][y].active = true;
-          this.board.grid[x][y].player = this.activePlayer;
-          this.playerArray[this.board.grid[x][y].player].score ++;
-
-        }
-      }
-  }
+  // this.activePlayer = 2;
+  // var x = this.board.x-1;
+  // var y = this.board.y-1;
+  // for (var i=0;i<this.board.x;i++) {
+  //     for (var j=0;j<this.board.y;j++) {
+  //       if(seed > Math.random() && !(this.board.grid[x][y].active)){
+  //         this.board.grid[x][y].active = true;
+  //         this.board.grid[x][y].player = this.activePlayer;
+  //         this.playerArray[this.board.grid[x][y].player].score ++;
+  //
+  //       }
+  //     }
+  // }
     // game.historyArray[game.board.grid[x][y].player].push([x,y]);
 }
 
@@ -171,7 +196,7 @@ function Tile(xWidth,yWidth,xPos,yPos) {
     this.width=(500/yWidth),
     this.active = false;
     this.age = 0;
-    this.player = 0;
+    this.player = 3;
 }
 
 Tile.prototype.draw = function(ctx) {
@@ -181,12 +206,13 @@ Tile.prototype.draw = function(ctx) {
         ctx.fillStyle = "rgba(0,60,0,1)";
     } else if (this.player === 1) {
         ctx.fillStyle = "rgba(30,0,30,1)";
-    } else {
+    } else if (this.player === 2) {
         ctx.fillStyle = "rgba(150,150,150,1)";
     }
     if(this.active) {
         ctx.fill();
     }
+    ctx.strokeStyle = "rgba(0,0,0,1)"
     // ctx.stroke();
     ctx.closePath();
 }
@@ -222,13 +248,20 @@ $(document).ready(function(){
 
     $('#player1').click(function(){
         game.activePlayer = 0;
+        erase = false;
     })
 
     $('#player2').click(function(){
         game.activePlayer = 1;
+        erase = false;
     })
     $('#wall').click(function(){
         game.activePlayer = 2;
+        erase = false;
+    })
+    $('#erase').click(function(){
+      game.activePlayer = 3;
+      erase = true;
     })
 
     drawInterval = setInterval(draw, 100);
