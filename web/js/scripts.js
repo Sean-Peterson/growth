@@ -48,6 +48,23 @@ Game.prototype.playerClick = function(canvas) {
     })
 };
 
+Game.prototype.generateWalls = function(canvas){
+  this.activePlayer = 2;
+  var x = this.board.x-1;
+  var y = this.board.y-1;
+  for (var i=0;i<this.board.x;i++) {
+      for (var j=0;j<this.board.y;j++) {
+        if(seed > Math.random() && !(this.board.grid[x][y].active)){
+          this.board.grid[x][y].active = true;
+          this.board.grid[x][y].player = this.activePlayer;
+          this.playerArray[this.board.grid[x][y].player].score ++;
+
+        }
+      }
+  }
+    // game.historyArray[game.board.grid[x][y].player].push([x,y]);
+}
+
 
 function Player(id,style) {
     this.id = id,
@@ -185,7 +202,7 @@ $(document).ready(function(){
     game.board.fill();
 
     game.playerClick(canvas);
-
+    game.generateWalls(canvas);
     function draw(){
         ctx.clearRect(0,0,canvas.width,canvas.height);
         if (game.run){
