@@ -4,18 +4,18 @@
         private $title;
         private $type;
         private $id;
-        private $user_id;
-        private $champion;
+        private $creator_id;
+        private $champion_id;
         private $champ_score;
         private $tiles;
 
-        function __construct($title, $type, $id = null, $user_id = null, $champion = null, $champ_score = null, $tiles = null)
+        function __construct($title, $type, $id = null, $creator_id = null, $champion_id = null, $champ_score = null, $tiles = null)
         {
             $this->title = (string) $title;
             $this->type = (int) $type;
             $this->id = $id;
-            $this->user_id = $user_id;
-            $this->champion = $champion;
+            $this->creator_id = $creator_id;
+            $this->champion_id = $champion_id;
             $this->champ_score = $champ_score;
             $this->tiles = $tiles;
         }
@@ -55,24 +55,24 @@
             $this->tiles = $new_tiles;
         }
 
-        function getUserId()
+        function getCreatorId()
         {
-            return $this->user_id;
+            return $this->creator_id;
         }
 
-        function setUserId($new_user_id)
+        function setCreatorId($new_creator_id)
         {
-            $this->user_id = (int) $new_user_id;
+            $this->creator_id = (int) $new_creator_id;
         }
 
-        function getChampion()
+        function getChampionId()
         {
-            return $this->champion;
+            return $this->champion_id;
         }
 
-        function setChampion($new_champion)
+        function setChampionId($new_champion_id)
         {
-            $this->champion = (int) $new_champion;
+            $this->champion_id = (int) $new_champion_id;
         }
 
         function getChampScore()
@@ -87,7 +87,7 @@
 
         function save()
         {
-            $GLOBALS['DB']->exec("INSERT INTO maps (title, type, user_id, champion, champ_score) VALUES ('{$this->getTitle()}', {$this->getType()}, {$this->getUserId()}, {$this->getChampion()}, {$this->getChampScore()});");
+            $GLOBALS['DB']->exec("INSERT INTO maps (title, type, creator_id, champion_id, champ_score) VALUES ('{$this->getTitle()}', {$this->getType()}, {$this->getCreatorId()}, {$this->getChampionId()}, {$this->getChampScore()});");
             $this->id = $GLOBALS['DB']->lastInsertId();
 
             foreach($this->tiles as $tile){
@@ -115,7 +115,7 @@
 
         static function find($id)
         {
-            return $GLOBALS['DB']->query("SELECT FROM maps WHERE id={$id};")->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, "Map", ['title', 'type', 'id', 'user_id', 'champion', 'champ_score'])[0];//may need to break apart
+            return $GLOBALS['DB']->query("SELECT FROM maps WHERE id={$id};")->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, "Map", ['title', 'type', 'id', 'creator_id', 'champion_id', 'champ_score'])[0];//may need to break apart
         }
 
         static function getAll()
@@ -125,7 +125,7 @@
             $returned_maps = $GLOBALS['DB']->query("SELECT * FROM maps;");
             foreach($returned_maps as $map)
             {
-                $new_map = new Map($map['title'], $map['type'], $map['id'], $map['user_id'], $map['champion'], $map['champ_score']);
+                $new_map = new Map($map['title'], $map['type'], $map['id'], $map['creator_id'], $map['champion_id'], $map['champ_score'],[]);
                 array_push($maps, $new_map);
             }
             return $maps;
