@@ -86,7 +86,22 @@ Game.prototype.generateWalls = function(canvas){
   // }
     // game.historyArray[game.board.grid[x][y].player].push([x,y]);
 }
-
+Game.prototype.saveConditions = function(){
+    var conditions = [];
+    for (var i=0;i<this.board.x;i++) {
+        for (var j=0;j<this.board.y;j++) {
+            if(this.board.grid[i][j].active){
+                conditions.push([i,j,this.board.grid[i][j].player]);
+            }
+        }
+    }
+    console.log(conditions);
+    $.post("/save_map", {"map":conditions}, function(response){
+        console.log(response);
+        console.log("-----------Parsed response below, unparsed above-------------");
+        console.log(JSON.parse(response));
+    })
+}
 
 function Player(id,style) {
     this.id = id,
@@ -236,7 +251,7 @@ $(document).ready(function(){
         // if (steps > 20) {
             // game.run = false;
             // steps = 0;
-            console.log(game.historyArray);
+            // console.log(game.historyArray);
         // }
         game.board.draw(ctx);
         game.endGame();
@@ -265,5 +280,10 @@ $(document).ready(function(){
 
     $('#start').click(function(){
         game.run = true;
+
+    })
+    $('#save').click(function(){
+        game.saveConditions();
+        //
     })
 })
