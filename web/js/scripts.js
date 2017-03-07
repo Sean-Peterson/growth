@@ -1,18 +1,19 @@
+var seed = Math.random();
+
+
 function Game() {
     this.board = new Board(100,100)
     this.log = [];
-    this.playerArray = [new Player(0,"string"), new Player(1,"potato")];
+    this.playerArray = [new Player(0,"string"), new Player(1,"potato"), new Player(2, "wall")];
     this.activePlayer = 0;
     this.run = false;
     this.historyArray = [[],[]];
     this.winner = 0;
     this.steps = 0;
 
-
-
 }
 Game.prototype.endGame = function() {
-    if((this.board.x * this.board.y) === (this.playerArray[0].score + this.playerArray[1].score)){
+    if(((this.board.x * this.board.y) - this.playerArray[2].score) === (this.playerArray[0].score + this.playerArray[1].score)){
         if(this.playerArray[0].score > this.playerArray[1].score) {
             this.winner = 0;
         } else {
@@ -25,17 +26,26 @@ Game.prototype.endGame = function() {
 
 Game.prototype.playerClick = function(canvas) {
     var game = this;
-    $('canvas').click(function(e){
+    $("canvas").mousedown(function(){//IMPERATIVE
+      $('canvas').mousemove(function(e){//DANGER SEE IMPERATIVES
         var bb = canvas.getBoundingClientRect();
         var x = e.clientX - bb.left;
         var y = e.clientY - bb.top;
         x = Math.floor(x/(500/game.board.x));
         y = Math.floor(y/(500/game.board.y));
-        game.board.grid[x][y].active = true;
-        game.board.grid[x][y].player = game.activePlayer;
-        game.playerArray[game.board.grid[x][y].player].score ++;
-        game.historyArray[game.board.grid[x][y].player].push([x,y]);
+        if(!(game.board.grid[x][y].active)){
+          game.board.grid[x][y].active = true;
+          game.board.grid[x][y].player = game.activePlayer;
+          game.playerArray[game.board.grid[x][y].player].score ++;
+          // game.historyArray[game.board.grid[x][y].player].push([x,y]);
+
+        }
+      });
+
     });
+    $(document).mouseup(function(){//ALSO IMPERATIVE
+      $("canvas").unbind("mousemove");
+    })
 };
 
 
@@ -58,7 +68,7 @@ Board.prototype.grow = function(game) {
     var coords = [];
     for (var i=0;i<this.x;i++) {
         for (var j=0;j<this.y;j++) {
-            if(this.grid[i][j].active){
+            if(this.grid[i][j].active && this.grid[i][j].player != 2){
                 this.grid[i][j].age ++;
                 if(i>0){
                     if(!(this.grid[i-1][j].active)){
@@ -152,8 +162,10 @@ Tile.prototype.draw = function(ctx) {
     ctx.rect(this.xPos,this.yPos,this.width,this.height);
     if(this.player === 0){
         ctx.fillStyle = "rgba(0,60,0,1)";
-    } else {
+    } else if (this.player === 1) {
         ctx.fillStyle = "rgba(30,0,30,1)";
+    } else {
+        ctx.fillStyle = "rgba(150,150,150,1)";
     }
     if(this.active) {
         ctx.fill();
@@ -168,7 +180,7 @@ Tile.prototype.draw = function(ctx) {
 $(document).ready(function(){
     var canvas = document.getElementById("canvas");
     var ctx = canvas.getContext("2d");
-    var steps = 110;
+    // var steps = 110;
     var game = new Game;
     game.board.fill();
 
@@ -178,14 +190,14 @@ $(document).ready(function(){
         ctx.clearRect(0,0,canvas.width,canvas.height);
         if (game.run){
             game.board.grow(game);
-            steps += 1;
+            // steps += 1;
         }
-        console.log(steps);
-        if (steps > 20) {
-            game.run = false;
-            steps = 0;
+        // console.log(steps);
+        // if (steps > 20) {
+            // game.run = false;
+            // steps = 0;
             console.log(game.historyArray);
-        }
+        // }
         game.board.draw(ctx);
         game.endGame();
         // debugger;
@@ -197,6 +209,9 @@ $(document).ready(function(){
 
     $('#player2').click(function(){
         game.activePlayer = 1;
+    })
+    $('#wall').click(function(){
+        game.activePlayer = 2;
     })
 
     drawInterval = setInterval(draw, 100);
