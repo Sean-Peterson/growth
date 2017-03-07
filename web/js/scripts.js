@@ -8,8 +8,6 @@ function Game() {
     this.winner = 0;
     this.steps = 0;
 
-
-
 }
 Game.prototype.endGame = function() {
     if((this.board.x * this.board.y) === (this.playerArray[0].score + this.playerArray[1].score)){
@@ -32,6 +30,7 @@ Game.prototype.playerClick = function(canvas) {
         x = Math.floor(x/(500/game.board.x));
         y = Math.floor(y/(500/game.board.y));
         game.board.grid[x][y].active = true;
+        game.board.grid[x][y].seed = [x,y];
         game.board.grid[x][y].player = game.activePlayer;
         game.playerArray[game.board.grid[x][y].player].score ++;
         game.historyArray[game.board.grid[x][y].player].push([x,y]);
@@ -56,40 +55,74 @@ function Board(x,y) {
 
 Board.prototype.grow = function(game) {
     var coords = [];
-    for (var i=0;i<this.x;i++) {
-        for (var j=0;j<this.y;j++) {
+    for (var i=1;i<this.x-1;i++) {
+        for (var j=1;j<this.y-1;j++) {
+            // if((this.grid[i][j+1].active && this.grid[i][j-1].active && this.grid[i+1][j].active && this.grid[i-1][j].active) && (this.grid[i][j+1].player === this.grid[i][j-1].player && this.grid[i+1][j].player === this.grid[i-1][j].player)) {
+            //     this.grid[i][j].active = true;
+            //     this.grid[i][j].player = this.grid[i][j+1].player;
+            // }
             if(this.grid[i][j].active){
                 this.grid[i][j].age ++;
+                // if(i>0 && i < this.x-1 && j>0 && j<this.y-1) {
+                //     var direction = Math.floor(Math.random()*4);
+                //     if (direction === 3) {
+                //         coords.push([i-1,j]);
+                //         this.grid[i-1][j].player = this.grid[i][j].player;
+                //         this.grid[i-1][j].seed = this.grid[i][j].seed;
+                //         this.grid[i][j].active = false;
+                //     } else if (direction === 2) {
+                //         coords.push([i+1,j]);
+                //         this.grid[i+1][j].player = this.grid[i][j].player;
+                //         this.grid[i+1][j].seed = this.grid[i][j].seed;
+                //         this.grid[i][j].active = false;
+                //
+                //     } else if (direction === 1) {
+                //         coords.push([i,j-1]);
+                //         this.grid[i][j-1].player = this.grid[i][j].player;
+                //         this.grid[i][j-1].seed = this.grid[i][j].seed;
+                //         this.grid[i][j].active = false;
+                //
+                //     } else if (direction === 0) {
+                //         coords.push([i,j+1]);
+                //         this.grid[i][j+1].player = this.grid[i][j].player;
+                //         this.grid[i][j+1].seed = this.grid[i][j].seed;
+                //         this.grid[i][j].active = false;
+                //
+                //     }
+                // }
                 if(i>0){
                     if(!(this.grid[i-1][j].active)){
-                        if(Math.random()>.7){
+                        if((Math.random()-this.grid[this.grid[i][j].seed[0]][this.grid[i][j].seed[1]].age/100)>.5){
                             coords.push([i-1,j]);
                             this.grid[i-1][j].player = this.grid[i][j].player;
+                            this.grid[i-1][j].seed = this.grid[i][j].seed;
                         }
                     }
                 }
                 if(i<this.x-1){
                     if(!(this.grid[i+1][j].active)){
-                        if(Math.random()>.7){
+                        if((Math.random()-this.grid[this.grid[i][j].seed[0]][this.grid[i][j].seed[1]].age/100)>.5){
                             coords.push([i+1,j]);
                             this.grid[i+1][j].player = this.grid[i][j].player;
+                            this.grid[i+1][j].seed = this.grid[i][j].seed;
                         }
                     }
                 }
                 if(j>0){
                     if(!(this.grid[i][j-1].active)){
-                        if(Math.random()>.7){
+                        if((Math.random()-this.grid[this.grid[i][j].seed[0]][this.grid[i][j].seed[1]].age/100)>.5){
                             coords.push([i,j-1]);
                             this.grid[i][j-1].player = this.grid[i][j].player;
+                            this.grid[i][j-1].seed = this.grid[i][j].seed;
                         }
                     }
                 }
                 if(j<this.y-1){
                     if(!(this.grid[i][j+1].active)){
-                        if(Math.random()>.7){
-
+                        if((Math.random()-this.grid[this.grid[i][j].seed[0]][this.grid[i][j].seed[1]].age/100)>.5){
                             coords.push([i,j+1]);
                             this.grid[i][j+1].player = this.grid[i][j].player;
+                            this.grid[i][j+1].seed = this.grid[i][j].seed;
                         }
                     }
                 }
@@ -145,6 +178,7 @@ function Tile(xWidth,yWidth,xPos,yPos) {
     this.active = false;
     this.age = 0;
     this.player = 0;
+    this.seed = [0,0]
 }
 
 Tile.prototype.draw = function(ctx) {
