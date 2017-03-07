@@ -5,7 +5,7 @@ function Game() {
     this.board = new Board(40,40)
     this.log = [];
     this.playerArray = [new Player(0,"string"), new Player(1,"potato"), new Player(2, "wall"), new Player(3, "string")];
-    this.activePlayer = 3;
+    this.activePlayer = 0;
     this.run = false;
     this.historyArray = [[],[]];
     this.winner = 0;
@@ -111,7 +111,7 @@ Board.prototype.grow = function(game) {
                 this.grid[i][j].age ++;
                 if(i>0){
                     if(!(this.grid[i-1][j].active)){
-                        if(Math.random()>.99){
+                        if(Math.random()>.7){
                             coords.push([i-1,j]);
                             this.grid[i-1][j].player = this.grid[i][j].player;
                         }
@@ -119,7 +119,7 @@ Board.prototype.grow = function(game) {
                 }
                 if(i<this.x-1){
                     if(!(this.grid[i+1][j].active)){
-                        if(Math.random()>.99){
+                        if(Math.random()>.7){
                             coords.push([i+1,j]);
                             this.grid[i+1][j].player = this.grid[i][j].player;
                         }
@@ -127,7 +127,7 @@ Board.prototype.grow = function(game) {
                 }
                 if(j>0){
                     if(!(this.grid[i][j-1].active)){
-                        if(Math.random()>.99){
+                        if(Math.random()>.7){
                             coords.push([i,j-1]);
                             this.grid[i][j-1].player = this.grid[i][j].player;
                         }
@@ -135,7 +135,7 @@ Board.prototype.grow = function(game) {
                 }
                 if(j<this.y-1){
                     if(!(this.grid[i][j+1].active)){
-                        if(Math.random()>.99){
+                        if(Math.random()>.7){
 
                             coords.push([i,j+1]);
                             this.grid[i][j+1].player = this.grid[i][j].player;

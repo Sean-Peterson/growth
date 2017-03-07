@@ -50,6 +50,23 @@
             $this->assertEquals($tiles, $result);
         }
 
+        function test_find()
+        {
+            $title = 'Washington D.C.';
+            $type = 0;
+            $id = null;
+            $creator_id = 43;
+            $champion_id = 3;
+            $champ_score = 642;
+            $tiles = [[23, 34, 1], [23, 34, 1], [9, 43, 1], [5, 2, 1], [12, 3, 3], [1, 2, 3], [2, 32, 1], [4, 21, 3]];
+            $test_map = new Map($title, $type, $id, $creator_id, $champion_id, $champ_score, $tiles);
+            $test_map->save();
+
+            $result = Map::find($test_map->getId());
+
+            $this->assertEquals($test_map, $result);
+        }
+
     }
 
 

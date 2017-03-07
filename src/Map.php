@@ -115,7 +115,9 @@
 
         static function find($id)
         {
-            return $GLOBALS['DB']->query("SELECT FROM maps WHERE id={$id};")->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, "Map", ['title', 'type', 'id', 'creator_id', 'champion_id', 'champ_score'])[0];//may need to break apart
+            $returned_map = $GLOBALS['DB']->query("SELECT * FROM maps WHERE id={$id};")->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, "Map", ['title', 'type', 'id', 'creator_id', 'champion_id', 'champ_score'])[0];
+            $returned_map->setTiles($returned_map->getCoordinates());
+            return $returned_map;
         }
 
         static function getAll()
