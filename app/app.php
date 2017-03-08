@@ -46,7 +46,7 @@
             // var_dump($network->feedforward($a));
             // var_dump($network->feedforward($b));
             // var_dump($network->feedforward($c));
-        }
+
         // $result = ($network->feedforward($c));
         // var_dump($network->feedforward($b));
         // var_dump($network->feedforward($c));
@@ -57,7 +57,7 @@
         // var_dump($result);
 
 
-        return $app["twig"]->render("root.html.twig", ['result' => $result]);
+        return $app["twig"]->render("root.html.twig", ['result' => $result, 'user' => $_SESSION['user'], 'edit' => false]);
     });
 
     $app->get('/hello', function() use($app) {
