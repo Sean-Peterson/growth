@@ -95,6 +95,10 @@
             }
         }
 
+        function addUser(){
+
+        }
+
         function getCoordinates()
         {
             $tiles = [];

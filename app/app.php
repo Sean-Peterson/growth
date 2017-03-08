@@ -3,6 +3,7 @@
     require_once __DIR__."/../vendor/autoload.php";
     require_once __DIR__."/../src/Map.php";
     require_once __DIR__."/../src/Network.php";
+    require_once __DIR__."/../src/User.php";
 
 
     $app = new Silex\Application();
@@ -15,6 +16,11 @@
     $password = 'root';
     $DB = new PDO($server, $username, $password);
 
+    session_start();
+    if(empty($_SESSION['user'])){
+        $_SESSION['user'] = [];
+    }
+
     $app->get('/', function() use($app) {
         $network = new Network([5,10,10,5]);
         $a = [1,0,0,0,1];
@@ -22,8 +28,9 @@
         // $array2 = [[7],[9],[11]];
         // $result = Network::dot($array1,$array2);
         $result = $network->feedforward($a);
+        // $_SESSION['user'] = [];//uncomment to fix pesky session bugs
 
-        return $app["twig"]->render("root.html.twig", ['edit' => false]);
+        return $app["twig"]->render("root.html.twig", ['edit' => false, 'user'=>$_SESSION['user']]);
     });
 
     $app->get('/hello', function() use($app) {
@@ -46,11 +53,11 @@
 
     $app->get('/load_map', function() use($app) {
         $maps = Map::getAll();
-        return $app['twig']->render('all_maps.html.twig', ['maps' => $maps]);
+        return $app['twig']->render('all_maps.html.twig', ['maps' => $maps, 'user'=>$_SESSION['user']]);
     });
 
     $app->get('/play/{id}', function($id) use($app) {
-        return $app['twig']->render('root.html.twig');
+        return $app['twig']->render('root.html.twig', ['user'=>$_SESSION['user']]);
     });
 
     $app->post('/getMap/{id}', function($id) use($app) {
@@ -60,7 +67,23 @@
     });
 
     $app->get('/create_map', function() use($app) {
-        return $app['twig']->render('root.html.twig', ['edit' => true]);
+        return $app['twig']->render('root.html.twig', ['edit' => true, 'user'=>$_SESSION['user']]);
+    });
+
+    $app->post('/sign_up', function() use ($app) {
+        $user = new User($_POST['username'], $_POST['password']);
+        $user->save();
+        return $app->redirect("/");
+    });
+
+    $app->post('/log_in', function() use ($app) {
+        User::logIn($_POST['username'], $_POST['password']);
+        return $app->redirect("/");
+    });
+
+    $app->post('/log_out', function() use ($app) {
+        $_SESSION['user']->logOut();
+        return $app->redirect("/");
     });
 
 

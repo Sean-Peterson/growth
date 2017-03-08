@@ -42,11 +42,19 @@
         {
             $GLOBALS['DB']->exec("INSERT INTO users (name, password) VALUES ('{$this->getName()}', '{$this->getPassword()}');");
             $this->id = $GLOBALS['DB']->lastInsertId();
+            $_SESSION['user'] = $this;
         }
 
         function getGames()
         {
 
+        }
+
+        function getMaps()
+        {
+            $returned_maps = $GLOBALS['DB']->query("SELECT * FROM maps WHERE creator_id={$this->getId};")->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, "Map", ['title', 'type', 'id', 'creator_id', 'champion_id', 'champ_score']);
+            $returned_map->setTiles($returned_map->getCoordinates());
+            return $returned_maps;
         }
 
         function delete()
@@ -55,6 +63,23 @@
             // MAYBE ADD FUNCTIONALITY
             // $GLOBALS['DB']->exec("DELETE FROM games WHERE user_id={$this->getId()};");
 
+        }
+
+        static function logIn($uname, $upassword)
+        {
+            $user = $GLOBALS['DB']->query("SELECT * FROM users WHERE name = '{$uname}' AND password = '{$upassword}';");//re add password when working
+
+            if($user)
+            {
+                $new_user = $user->fetchAll(PDO::FETCH_CLASS|PDO::FETCH_PROPS_LATE, "User", ['name', 'password', 'id'])[0];
+
+                $_SESSION['user'] = $new_user;
+            }
+        }
+
+        function logOut()
+        {
+            $_SESSION['user'] = [];
         }
 
         static function find($id)
