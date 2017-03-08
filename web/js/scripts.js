@@ -94,13 +94,18 @@ Game.prototype.saveConditions = function(){
              }
          }
      }
-     console.log(conditions);
+    //  console.log(conditions);
      var title = $("#title").val();
      var type = $("#type").val();
      $.post("/save_map", {"map":conditions, "title":title, "type":type}, function(response){
          console.log(response);
          console.log("-----------Parsed response below, unparsed above-------------");
-         console.log(JSON.parse(response));
+         var parsedResponse = JSON.parse(response);
+         console.log(parsedResponse);
+        for(var i = 0; i < parsedResponse.length; i++){
+          console.log("Its an array");
+        }
+        console.log("--------")
      })
 
 }

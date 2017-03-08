@@ -33,13 +33,19 @@
         $result = 'hello';
         return $result;
     });
+    $app->get('/deleteAll', function() use($app) {
+        Map::deleteAll();
+        return $app->redirect("/");
+    });
 
     $app->post('/save_map', function() use ($app){
         //will save map here
         $map = new Map($_POST['title'], $_POST['type'], null, null, null, null, $_POST['map']);
+        
         $map->save();
 
-        return json_encode($map->getCoordinates());
+
+        return json_encode($_POST['map']);
     });
 
     return $app;
