@@ -9,12 +9,35 @@
     $app->get('/', function() use($app) {
         $network = new Network([2,3,2]);
         $a = [1,0];
-        // $array1 = [[1],[2]];
-        // $array2 = [[3,4,5]];
+        $b = [0,1];
+        $c = [1,1];
+        // $array1 = [[1,2,3],[4,5,6],[7,8,9]];
+        // $array2 = [[3],[4],[5]];
         // $result = Network::dot($array1,$array2);
-        $result = $network->feedforward($a);
-        $result = $network->backprop([1,0],[0,1]);
-        // var_dump($result);
+        for($i=0;$i<100;$i++){
+            $network->backprop([1,0],[0,1],.1);
+            $network->backprop([0,1],[1,0],.1);
+            // var_dump($network->feedforward($a));
+            // var_dump($network->feedforward($b));
+            // var_dump($network->feedforward($c));
+            // $network->backprop([0,1],[0,1],.1);å
+            // var_dump($network->feedforward($a));
+            // var_dump($network->feedforward($b));
+            // var_dump($network->feedforward($c));
+            // $network->backprop([1,1],[1,1],.1);
+            // var_dump($network->feedforward($a));
+            // var_dump($network->feedforward($b));
+            // var_dump($network->feedforward($c));
+        }
+        $result = ($network->feedforward($c));
+        // var_dump($network->feedforward($b));
+        // var_dump($network->feedforward($c));
+
+
+
+
+
+        var_dump($result);
 
         return $app["twig"]->render("root.html.twig", ['result' => $result]);
     });

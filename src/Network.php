@@ -17,7 +17,7 @@
             for($i = 0; $i<$this->num_layers-1; $i++) {
                 array_push($this->biases, []);
                 for($j = 0; $j<$sizes[$i+1]; $j++) {
-                    array_push($this->biases[$i], rand(0,10000)/10000);
+                    array_push($this->biases[$i], rand(0,100)/100);
                 }
             }
 
@@ -51,7 +51,7 @@
                 for($j = 0; $j<$sizes[$i+1]; $j++) {
                     array_push($this->weights[$i], []);
                     for($k = 0; $k<$sizes[$i]; $k++){
-                        array_push($this->weights[$i][$j], rand(-10000,10000)/10000);
+                        array_push($this->weights[$i][$j], rand(-100,100)/100);
                     }
                 }
             }
@@ -89,9 +89,8 @@
             return $this->activations[$last-1];
         }
 
-        function backprop($x, $y) {
+        function backprop($x, $y, $eta) {
             $activation = $x;
-            $activations = [];
 
             for ($i = 0; $i<$this->sizes[0]; $i++) {
                 $this->activations[0][$i] = $activation[$i];
@@ -140,7 +139,7 @@
                 foreach($delta as $d) {
                     array_push($new_delta, [$d]);
                 }
-                $delta = $new_delta;
+
 
                 $new_weights = [];
                 for($k=0;$k<sizeof($this->weights[$i][0]);$k++) {
@@ -149,17 +148,34 @@
                         array_push($new_weights[$k], $this->weights[$i][$j][$k]);
                     }
                 }
-
-
-
+                // var_dump($new_delta);
+                // var_dump($new_weights);
+                var_dump($sp);
                 $delta = Network::dot($new_weights, $new_delta);
+                // var_dump($delta);
                 $this->nabla_b[$i-1] = $delta;
+                // var_dump($this->nabla_b[$i-1]);
                 $this->nabla_w[$i-1] = Network::dot($delta, [$this->activations[$i-1]]);
 
 
 
             }
 
+
+            for($i = 0; $i<$this->num_layers-1; $i++) {
+                for($j = 0; $j<$this->sizes[$i+1]; $j++) {
+                    // var_dump($this->nabla_b[$i][$j][0]);
+                    $this->biases[$i][$j] = ($this->biases[$i][$j]-$eta)*$this->nabla_b[$i][$j][0];
+                }
+            }
+
+            for($i = 0; $i<$this->num_layers-1; $i++) {
+                for($j = 0; $j<$this->sizes[$i+1]; $j++) {
+                    for($k = 0; $k<$this->sizes[$i]; $k++){
+                        $this->weights[$i][$j][$k] = ($this->weights[$i][$j][$k]-$eta)*$this->nabla_w[$i][$j][$k];
+                    }
+                }
+            }
 
         }
 
