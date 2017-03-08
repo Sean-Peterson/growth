@@ -13,7 +13,7 @@
 
             for($i = 0; $i<$this->num_layers-1; $i++) {
                 array_push($this->biases, []);
-                for($j = 0; $j<$sizes[$i]; $j++) {
+                for($j = 0; $j<$sizes[$i+1]; $j++) {
                     array_push($this->biases[$i], rand(0,10000)/10000);
                 }
             }
@@ -40,23 +40,87 @@
 
 
         function feedforward($a){
-            for ($i = 0; $i<$this->size[0]; $i++) {
+            for ($i = 0; $i<$this->sizes[0]; $i++) {
                 $this->activations[0][$i] = $a[$i];
             }
 
             for ($i = 1; $i<$this->num_layers; $i++){
-                for($j = 0; $j<($sizes[$i]); $j++){
-                    $activations[$i][$j] = Network::sigmoid(Network::dot($this->weights[$i-1][$j], $this->activations[$i-1])+$this->bias[$i][$j]);
+                for($j = 0; $j<($this->sizes[$i]); $j++){
+                    $interim_activations = [];
+                    foreach($this->activations[$i-1] as $individual){
+                        array_push($interim_activations, [$individual]);
+                    }
+                    $interim_weights = [$this->weights[$i-1][$j]];
+                    $dot_product = Network::dot($interim_weights, $interim_activations);
+                    $this->activations[$i][$j] = Network::sigmoid(($dot_product[0][0])+$this->biases[$i-1][$j]);
                 }
             }
+            $last = sizeof($this->activations);
+            return $this->activations[$last-1];
+        }
+
+        function backprop($x, $y) {
+            $activation = $x;
+            $activations = [];
+            $zs = [];
+            $nabla_b = [];
+            $nabla_w = [];
+
+            for ($i = 0; $i<$this->sizes[0]; $i++) {
+                $this->activations[0][$i] = $a[$i];
+            }
+
+
+            for ($i = 1; $i<$this->num_layers; $i++){
+                for($j = 0; $j<($this->sizes[$i]); $j++){
+                    $interim_activations = [];
+                    foreach($this->activations[$i-1] as $individual){
+                        array_push($interim_activations, [$individual]);
+                    }
+                    $interim_weights = [$this->weights[$i-1][$j]];
+                    $dot_product = Network::dot($interim_weights, $interim_activations);
+                    $z = Network::sigmoid(($dot_product[0][0])+$this->biases[$i-1][$j]);
+                    $this->activations[$i][$j] = Network::sigmoid(($dot_product[0][0])+$this->biases[$i-1][$j]);
+
+                    array_push($zs, $z);
+                    $act = Network::sigmoid($z);
+                    array_push($activations, $act);
+                }
+            }
+            $last_a = sizeof($this->activations);
+            $last_z = sizeof($zs);
+
+            $delta = Network::cost_derivative($this->activations[$last_a-1], $y) * Network::sigmoid_prime($zs[$last_z-1]);
+            
+
         }
 
 
 
 
 
+
+
+
+
+
+
+        function cost_derivative($training_y){
+            $last_layer = sizeof($this->activations) - 1;
+            $output_activations = $this->activations[$last_layer];
+            $cost_derivative_array = [];
+            for($i=0;$i<sizeof($training_y);$i++) {
+                array_push($cost_derivative_array, ($output_activations[$i]-$training_y[$i]));
+            }
+        }
+
         static function sigmoid($z) {
             $value =  1.0/(1.0+exp(-$z));
+            return $value;
+        }
+
+        static function sigmoid_prime($z) {
+            $value = Network::sigmoid($z)*(1-Network::sigmoid($z));
             return $value;
         }
 
@@ -80,22 +144,6 @@
             return $result_array;
 
         }
-
-        // [
-        //     [58,58]
-        //     [154,154]
-        // ]
-        //
-        // [
-        //     [1,2,3]
-        //     [4,5,6]
-        // ]
-        //
-        // [
-        //     [7,8]
-        //     [9,10]
-        //     [11,12]
-        // ]
 
 
         function display_network() {

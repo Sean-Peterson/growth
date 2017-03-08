@@ -1,5 +1,5 @@
 function Game() {
-    this.board = new Board(100,100)
+    this.board = new Board(20,20)
     this.log = [];
     this.playerArray = [new Player(0,"string"), new Player(1,"potato")];
     this.activePlayer = 0;
@@ -10,7 +10,7 @@ function Game() {
 
 }
 Game.prototype.endGame = function() {
-    if((this.board.x * this.board.y) === (this.playerArray[0].score + this.playerArray[1].score)){
+    if((this.board.x * this.board.y) <= (this.playerArray[0].score + this.playerArray[1].score)){
         if(this.playerArray[0].score > this.playerArray[1].score) {
             this.winner = 0;
         } else {
@@ -215,11 +215,11 @@ $(document).ready(function(){
             steps += 1;
         }
         console.log(steps);
-        if (steps > 20) {
-            game.run = false;
-            steps = 0;
-            console.log(game.historyArray);
-        }
+        // if (steps > 20) {
+        //     game.run = false;
+        //     steps = 0;
+        //     console.log(game.historyArray);
+        // }
         game.board.draw(ctx);
         game.endGame();
         // debugger;

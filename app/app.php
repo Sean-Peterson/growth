@@ -7,18 +7,16 @@
     $app->register(new Silex\Provider\TwigServiceProvider(), ["twig.path" => __DIR__."/../views"]);
 
     $app->get('/', function() use($app) {
-        $network = new Network([2,3,2]);
-        $array1 =         [
-                    [1,2,3],
-                    [4,5,6]
-                ];
-        $array2 =
-                [
-                    [7,8],
-                    [9,10],
-                    [11,12]
-                ];
-        var_dump($network);
+        $network = new Network([5,10,10,5]);
+        $a = [1,0,0,0,1];
+        // $array1 = [[1,2,3]];
+        // $array2 = [[7],[9],[11]];
+        // $result = Network::dot($array1,$array2);
+        $result = $network->feedforward($a);
+
+
+
+        var_dump($result);
         return $app["twig"]->render("root.html.twig", ['result' => $result]);
     });
 
