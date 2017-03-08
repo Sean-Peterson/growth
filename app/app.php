@@ -23,10 +23,7 @@
         // $result = Network::dot($array1,$array2);
         $result = $network->feedforward($a);
 
-
-
-
-        return $app["twig"]->render("root.html.twig");
+        return $app["twig"]->render("root.html.twig", ['edit' => false]);
     });
 
     $app->get('/hello', function() use($app) {
@@ -60,6 +57,10 @@
         $map = Map::find($id);
         $response = $map->getCoordinates();
         return json_encode($response);
+    });
+
+    $app->get('/create_map', function() use($app) {
+        return $app['twig']->render('root.html.twig', ['edit' => true]);
     });
 
 
