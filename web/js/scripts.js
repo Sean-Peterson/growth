@@ -1,6 +1,31 @@
 var seed = Math.random();
 var erase = false;
 
+function mapLoading(game){
+    var url = window.location.href;
+    var id = url.substring(url.search(/\d+$/));
+
+    $.post('/getMap/'+ id, {'id': id}, function(response) {
+        console.log(response);
+        map = JSON.parse(response);
+        console.log(map);
+        console.log(map.length);
+        var activeTiles = map.length;
+        if(activeTiles > 0){
+            for(var i = 0; i < activeTiles; i ++){
+                game.board.grid[map[i][0]][map[i][1]].active = true;
+                game.board.grid[map[i][0]][map[i][1]].player = parseInt(map[i][2]);
+                // console.log(map[i][2]);
+                game.playerArray[map[i][2]].score ++;
+
+            }
+
+        }
+    });
+
+
+}
+
 function Game() {
     this.board = new Board(40,40)
     this.log = [];
@@ -94,7 +119,6 @@ Game.prototype.saveConditions = function(){
              }
          }
      }
-    //  console.log(conditions);
      var title = $("#title").val();
      var type = $("#type").val();
      $.post("/save_map", {"map":conditions, "title":title, "type":type}, function(response){
@@ -109,6 +133,7 @@ Game.prototype.saveConditions = function(){
      })
 
 }
+
 
 function Player(id,style) {
     this.id = id,
@@ -262,6 +287,8 @@ Tile.prototype.draw = function(ctx) {
         ctx.fillStyle = "rgba(30,0,30,1)";
     } else if (this.player === 2) {
         ctx.fillStyle = "rgba(150,150,150,1)";
+    } else {
+        ctx.fillStyle = "rgba(255,255,255,1)";
     }
     if(this.active) {
         ctx.fill();
@@ -283,6 +310,8 @@ $(document).ready(function(){
 
     game.playerClick(canvas);
     game.generateWalls(canvas);
+    mapLoading(game);
+
     function draw(){
         ctx.clearRect(0,0,canvas.width,canvas.height);
         if (game.run){

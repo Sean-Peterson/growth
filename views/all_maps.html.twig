@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <ul>
+    {% for map in maps %}
+        <li><a href="/play/{{ map.getId }}">{{ map.getTitle }}</a></li>
+
+    {% endfor %}
+    </ul>
+
+{% endblock %}

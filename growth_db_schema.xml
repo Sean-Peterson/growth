@@ -37,23 +37,23 @@
 		<type label="SET" length="1" sql="SET" quote=""/>
 		<type label="Bit" length="0" sql="bit" quote=""/>
 	</group>
-</datatypes><table x="713" y="255" name="Maps">
+</datatypes><table x="550" y="298" name="Maps">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="Title" null="1" autoincrement="0">
 <datatype>VARCHAR(255)</datatype>
 <default>NULL</default></row>
-<row name="player_id" null="1" autoincrement="0">
+<row name="creator_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
-<default>NULL</default><relation table="players" row="id" />
+<default>NULL</default><relation table="users" row="id" />
 </row>
 <row name="type" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="champion" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
-<default>NULL</default><relation table="players" row="id" />
+<default>NULL</default><relation table="users" row="id" />
 </row>
 <row name="champ_score" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -62,7 +62,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="926" y="499" name="map_coordinates">
+<table x="864" y="560" name="map_coordinates">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -83,7 +83,7 @@
 <part>id</part>
 </key>
 </table>
-<table x="25" y="330" name="players">
+<table x="25" y="330" name="users">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
@@ -101,9 +101,9 @@
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
-<row name="player_id" null="1" autoincrement="0">
+<row name="user_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
-<default>NULL</default><relation table="players" row="id" />
+<default>NULL</default><relation table="users" row="id" />
 </row>
 <row name="map_id" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
@@ -123,7 +123,7 @@
 <part>player_int</part>
 </key>
 </table>
-<table x="435" y="29" name="game_history_coordinates">
+<table x="586" y="34" name="game_history_coordinates">
 <row name="id" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>

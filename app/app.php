@@ -26,7 +26,7 @@
 
 
 
-        return $app["twig"]->render("root.html.twig", ['result' => $result]);
+        return $app["twig"]->render("root.html.twig");
     });
 
     $app->get('/hello', function() use($app) {
@@ -40,13 +40,29 @@
 
     $app->post('/save_map', function() use ($app){
         //will save map here
-        $map = new Map($_POST['title'], $_POST['type'], null, null, null, null, $_POST['map']);
-        
-        $map->save();
+        $map = new Map($_POST['title'], $_POST['type'], 1, 1, 1, 1, $_POST['map']);
 
+        $map->save();
 
         return json_encode($_POST['map']);
     });
+
+    $app->get('/load_map', function() use($app) {
+        $maps = Map::getAll();
+        return $app['twig']->render('all_maps.html.twig', ['maps' => $maps]);
+    });
+
+    $app->get('/play/{id}', function($id) use($app) {
+        return $app['twig']->render('root.html.twig');
+    });
+
+    $app->post('/getMap/{id}', function($id) use($app) {
+        $map = Map::find($id);
+        $response = $map->getCoordinates();
+        return json_encode($response);
+    });
+
+
 
     return $app;
 ?>
