@@ -12,6 +12,15 @@
     </head>
     <body>
         {{result}}
+        <div class = "form-group">
+            <label for="title">Give your map a title</label>
+            <input type="text" name="title" id="title" required>
+            <label for="type">What type of map will this be?</label>
+            <select name="type">
+                <option value = 0>Scenario</option>
+                <option value = 1>PvP</option>
+            </select>
+        </div>
         <canvas id="canvas" width="500" height="500" style="border:2px solid black;"></canvas>
         <button type="button" name="button" id='player1'>PLAYER 1</button>
         <button type="button" name="button" id='player2'>PLAYER 2</button>

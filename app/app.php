@@ -6,6 +6,8 @@
     $app = new Silex\Application();
     $app->register(new Silex\Provider\TwigServiceProvider(), ["twig.path" => __DIR__."/../views"]);
 
+    $app['debug']= true;
+
     $server = 'mysql:host=localhost:8889;dbname=growth';
     $username = 'root';
     $password = 'root';
@@ -23,7 +25,10 @@
 
     $app->post('/save_map', function() use ($app){
         //will save map here
-        return json_encode($_POST['map']);
+        $map = new Map($_POST['title'], $_POST['type'], null, null, null, null, $_POST['map']);
+        $map->save();
+
+        return json_encode([$map, $map->getCoordinates()]);
     });
 
     return $app;

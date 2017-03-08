@@ -96,7 +96,8 @@ Game.prototype.saveConditions = function(){
         }
     }
     console.log(conditions);
-    $.post("/save_map", {"map":conditions}, function(response){
+    var title = $("#title").val();
+    $.post("/save_map", {"map":conditions, "title":title}, function(response){
         console.log(response);
         console.log("-----------Parsed response below, unparsed above-------------");
         console.log(JSON.parse(response));
