@@ -67,7 +67,7 @@
 
         static function logIn($uname, $upassword)
         {
-            $user = $GLOBALS['DB']->query("SELECT * FROM users WHERE name = '{$uname}' AND password = '{$upassword}';");//re add password when working
+            $user = $GLOBALS['DB']->query("SELECT * FROM users WHERE name = '{$uname}' AND password = '{$upassword}';");
 
             if($user)
             {
