@@ -46,7 +46,7 @@
             // var_dump($network->feedforward($a));
             // var_dump($network->feedforward($b));
             // var_dump($network->feedforward($c));
-        }
+        // }
         // $result = ($network->feedforward($c));
         // var_dump($network->feedforward($b));
         // var_dump($network->feedforward($c));
