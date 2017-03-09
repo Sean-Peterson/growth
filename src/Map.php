@@ -95,9 +95,22 @@
             }
         }
 
-        // function addUser(){
-        //
-        // }
+        function getGames()
+        {
+            $games = [];
+            $returned_games = $GLOBALS['DB']->query("SELECT * FROM games WHERE map_id = {$this->getId()};");
+            foreach ($returned_games as $game) {
+                $coords = [];
+                $id = $game['id'];
+                $game_coords = $GLOBALS['DB']->query("SELECT * FROM game_history_coordinates WHERE game_id = {$id};");
+                foreach ($game_coords as $tile) {
+                    array_push($coords, [$tile['x'],$tile['y'],$tile['player_int']]);
+                }
+
+                array_push($games, [$coords, $game['winner']]);
+            }
+            return $games;
+        }
 
         function getCoordinates()
         {

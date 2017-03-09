@@ -79,6 +79,12 @@
         return json_encode($_POST['map']);
     });
 
+    $app->post('/save_game', function() use($app) {
+        $_SESSION['user']->saveGame($_POST['start_conditions'], $_POST['map_id'], $_POST['winner_score'], $_POST['player_int'], $_POST['winner']);
+
+        return json_encode([$_POST['start_conditions'], $_POST['map_id'], $_POST['winner_score'], $_POST['player_int'], $_POST['winner']]);
+    });
+
     $app->get('/load_map', function() use($app) {
         $maps = Map::getAll();
         return $app['twig']->render('all_maps.html.twig', ['maps' => $maps, 'user'=>$_SESSION['user']]);

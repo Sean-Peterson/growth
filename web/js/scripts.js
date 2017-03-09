@@ -45,6 +45,12 @@ Game.prototype.endGame = function() {
             this.winner = 1;
         }
         $("#end-game").text("GAME OVER Player 1 score: "+this.playerArray[0].score+" Player 2 score: "+this.playerArray[1].score);
+        //post game data
+        var url = window.location.href;
+        var map_id = url.substring(url.search(/\d+$/));
+        $.post('/save_game', {'start_conditions': start_conditions, 'map_id': map_id, 'winner_score': winner_score, 'player_int': player_int, 'winner': winner} function(response) {
+            console.log(JSON.parse(response));
+        });
 
     }
 }
@@ -132,6 +138,28 @@ Game.prototype.saveConditions = function(){
         console.log("--------")
      })
 
+}
+Game.prototype.saveGame(){
+    var conditions = [];
+     for (var i=0;i<this.board.x;i++) {
+         for (var j=0;j<this.board.y;j++) {
+             if(this.board.grid[i][j].active){
+                 conditions.push([i,j,this.board.grid[i][j].player]);
+             }
+         }
+     }
+     var title = $("#title").val();
+     var type = $("#type").val();
+     $.post("/save_map", {"map":conditions, "title":title, "type":type}, function(response){
+         console.log(response);
+         console.log("-----------Parsed response below, unparsed above-------------");
+         var parsedResponse = JSON.parse(response);
+         console.log(parsedResponse);
+        for(var i = 0; i < parsedResponse.length; i++){
+          console.log("Its an array");
+        }
+        console.log("--------")
+     })
 }
 
 
@@ -351,7 +379,7 @@ $(document).ready(function(){
 
     $('#start').click(function(){
         game.run = true;
-
+        // save initial conditions, locally
     })
     $('#save').click(function(){
         game.saveConditions();

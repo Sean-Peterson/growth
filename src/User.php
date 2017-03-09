@@ -45,14 +45,39 @@
             $_SESSION['user'] = $this;
         }
 
-        function saveGame()
+        function saveGame($start_conditions, $map_id, $winner_score, $player_int, $winner)
         {
-            
+            //if winner save winner score, insert $game_score
+            $game_score = $winner_score;
+            if($winner !== $player_int){
+                $game_score = 1600 - $winner_score;
+            }
+
+            $GLOBALS['DB']->exec("INSERT INTO games (user_id, map_id, game_score, player_int, winner) VALUES ({$this->getId()}, {$map_id}, {$game_score}, {$player_int}, {$winner});");
+
+            $game_id = $GLOBALS['DB']->lastInsertId();
+
+            foreach($start_conditions as $tile){
+                $GLOBALS['DB']->exec("INSERT INTO map_history_coordinates (map_id, x, y, player_int) VALUES ({$game_id}, {$tile[0]}, {$tile[1]}, {$tile[2]});");
+            }
         }
 
         function getGames()
         {
+            $games = [];
+            $returned_games = $GLOBALS['DB']->query("SELECT * FROM games WHERE user_id = {$this->getId()};");
+            foreach ($returned_games as $game) {
 
+                $coords = [];
+                $id = $game['id'];
+                $game_coords = $GLOBALS['DB']->query("SELECT * FROM game_history_coordinates WHERE game_id = {$id};");
+                foreach ($game_coords as $tile) {
+                    array_push($coords, [$tile['x'],$tile['y'],$tile['player_int']]);
+                }
+
+                array_push($games, [$coords, $game['map_id'], $game['game_score'], $game['player_int'], $game['winner']]);
+            }
+            return $games;
         }
 
         function getMaps()
