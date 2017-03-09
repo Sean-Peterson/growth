@@ -164,7 +164,7 @@
 
        $player_moves = Network::parse_playing_grid($player_map);
 
-       for($i=0;$i<40;$i++){
+       for($i=0;$i<10;$i++){
          $network->backprop($loser_moves, $winner_moves, 1);
          $network->backprop($loser_moves2, $winner_moves2, 1);
          $network->backprop($loser_moves3, $winner_moves3, 1);
