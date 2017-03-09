@@ -56,24 +56,24 @@
         //
         //
         // var_dump($result);
-        $map = Map::find(38);
-        $coords = $map->getCoordinates();
-        $map2 = Map::find(36);
-        $coords2 = $map2->getCoordinates();
-        $map3 = Map::find(40);
-        $coords3 = $map3->getCoordinates();
-        // var_dump($coords3);
-        $loser_moves = Network::parse_training_grid($coords)[0];
-        $winner_moves = Network::parse_training_grid($coords)[1];
-        $loser_moves2 = Network::parse_training_grid($coords2)[0];
-        $winner_moves2 = Network::parse_training_grid($coords2)[1];
-        $player_moves = Network::parse_playing_grid($coords3);
-
-        for($i=0;$i<20;$i++){
-          $network->backprop($loser_moves, $winner_moves, 1);
-          $network->backprop($loser_moves2, $winner_moves2, 1);
-        }
-        // var_dump($network->feedforward($player_moves));
+        // $map = Map::find(38);
+        // $coords = $map->getCoordinates();
+        // $map2 = Map::find(36);
+        // $coords2 = $map2->getCoordinates();
+        // $map3 = Map::find(40);
+        // $coords3 = $map3->getCoordinates();
+        // // var_dump($coords3);
+        // $loser_moves = Network::parse_training_grid($coords)[0];
+        // $winner_moves = Network::parse_training_grid($coords)[1];
+        // $loser_moves2 = Network::parse_training_grid($coords2)[0];
+        // $winner_moves2 = Network::parse_training_grid($coords2)[1];
+        // $player_moves = Network::parse_playing_grid($coords3);
+        //
+        // for($i=0;$i<20;$i++){
+        //   $network->backprop($loser_moves, $winner_moves, 1);
+        //   $network->backprop($loser_moves2, $winner_moves2, 1);
+        // }
+        // // var_dump($network->feedforward($player_moves));
         $result = 'no';
 
 
