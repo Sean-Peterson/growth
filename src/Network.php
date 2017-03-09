@@ -285,7 +285,7 @@
             }
           }
 
-          for($k=0;$k<3;$k++) {
+          for($k=0;$k<sizeof($response_array);$k++) {
             for($i=0;$i<20;$i++) {
               for($j=0;$j<20;$j++) {
                 if($response_array[$k][0] == $i && $response_array[$k][1] == $j && $response_array[$k][2] == 0) {

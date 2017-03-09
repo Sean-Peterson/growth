@@ -361,9 +361,9 @@ Tile.prototype.draw = function(ctx) {
     ctx.beginPath();
     ctx.rect(this.xPos,this.yPos,this.width,this.height);
     if(this.player === 0){
-        ctx.fillStyle = "rgba(0,60,0,1)";
+        ctx.fillStyle = "rgba(0,0,220,.7)";
     } else if (this.player === 1) {
-        ctx.fillStyle = "rgba(30,0,30,1)";
+        ctx.fillStyle = "rgba(220,0,0,.7)";
     } else if (this.player === 2) {
         ctx.fillStyle = "rgba(150,150,150,1)";
     } else {

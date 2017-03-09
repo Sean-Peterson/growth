@@ -4,3 +4,6 @@ canvas {
 .user {
     float:right;
 }
+li{
+  list-style: none;
+}
