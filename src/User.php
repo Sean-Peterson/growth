@@ -45,6 +45,11 @@
             $_SESSION['user'] = $this;
         }
 
+        function saveGame()
+        {
+            
+        }
+
         function getGames()
         {
 
