@@ -90,7 +90,8 @@
         return $app['twig']->render('all_maps.html.twig', ['maps' => $maps, 'user'=>$_SESSION['user']]);
     });
 
-    $app->get('/play/{id}', function($id) use($app) {
+    $app->get('/play/{type}/{id}', function($id) use($app) {
+
         return $app['twig']->render('root.html.twig', ['user'=>$_SESSION['user'], 'edit' => false]);
     });
 
