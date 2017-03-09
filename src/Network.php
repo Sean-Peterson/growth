@@ -244,14 +244,57 @@
         }
 
 
-        function display_network() {
-            foreach($sizes as $size) {
-                echo ($size);
+        static function parse_training_grid($response_array){
+          $player1_result = [];
+          $player2_result = [];
+          for($i=0;$i<20;$i++) {
+            for($j=0;$j<20;$j++) {
+              array_push($player1_result, 0);
+              array_push($player2_result, 0);
             }
+          }
 
-            foreach($weights as $weight){
-                echo($weight);
+          for($k=0;$k<6;$k++) {
+            for($i=0;$i<20;$i++) {
+              for($j=0;$j<20;$j++) {
+                if($response_array[$k][0] == $i && $response_array[$k][1] == $j && $response_array[$k][2] == 0) {
+                  $player1_result[($i*20) + $j] = 1;
+                }
+              }
             }
+          }
+
+          for($k=0;$k<6;$k++) {
+            for($i=0;$i<20;$i++) {
+              for($j=0;$j<20;$j++) {
+                if($response_array[$k][0] == $i && $response_array[$k][1] == $j && $response_array[$k][2] == 1) {
+                  $player2_result[($i*20) + $j] = 1;
+                }
+              }
+            }
+          }
+
+          return [$player1_result, $player2_result];
+        }
+
+        static function parse_playing_grid($response_array){
+          $player1_result = [];
+          for($i=0;$i<20;$i++) {
+            for($j=0;$j<20;$j++) {
+              array_push($player1_result, 0);
+            }
+          }
+
+          for($k=0;$k<3;$k++) {
+            for($i=0;$i<20;$i++) {
+              for($j=0;$j<20;$j++) {
+                if($response_array[$k][0] == $i && $response_array[$k][1] == $j && $response_array[$k][2] == 0) {
+                  $player1_result[($i*20) + $j] = 1;
+                }
+              }
+            }
+          }
+          return $player1_result;
         }
 
 

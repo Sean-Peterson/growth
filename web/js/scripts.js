@@ -27,7 +27,7 @@ function mapLoading(game){
 }
 
 function Game() {
-    this.board = new Board(40,40)
+    this.board = new Board(20,20)
     this.log = [];
     this.playerArray = [new Player(0,"string"), new Player(1,"potato"), new Player(2, "wall"), new Player(3, "string")];
     this.activePlayer = 0;
@@ -294,7 +294,7 @@ Tile.prototype.draw = function(ctx) {
         ctx.fill();
     }
     ctx.strokeStyle = "rgba(255,255,255,1)"
-    // ctx.stroke();
+    ctx.stroke();
     ctx.closePath();
 }
 
