@@ -70,6 +70,29 @@ Game.prototype.endGame = function() {
     }
 }
 
+Game.prototype.startComputer = function() {
+  this.saveStartConditions();
+  var game = this;
+    $.post('/start_computer_game', {'start_conditions': this.startConditions}, function(response) {
+      console.log(response)
+       var map = JSON.parse(response);
+       console.log(map);
+       console.log(map.length);
+       var activeTiles = map.length;
+       if(activeTiles > 0){
+           for(var i = 0; i < activeTiles; i ++){
+               game.board.grid[map[i][0]][map[i][1]].active = true;
+               game.board.grid[map[i][0]][map[i][1]].player = parseInt(map[i][2]);
+               // console.log(map[i][2]);
+               game.playerArray[map[i][2]].score ++;
+
+           }
+
+       }
+    });
+
+}
+
 Game.prototype.saveStartConditions = function(){
 
      for (var i=0;i<this.board.x;i++) {
@@ -410,5 +433,9 @@ $(document).ready(function(){
     $('#save').click(function(){
         game.saveConditions();
         //
+    })
+
+    $('#computer_moves').click(function(){
+       game.startComputer();
     })
 })

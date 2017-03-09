@@ -50,7 +50,7 @@
             //if winner save winner score, insert $game_score
             $game_score = $winner_score;
             if($winner !== $player_int){
-                $game_score = 1600 - $winner_score;
+                $game_score = 400 - $winner_score;
             }
 
             $GLOBALS['DB']->exec("INSERT INTO games (user_id, map_id, game_score, player_int, winner) VALUES ({$this->getId()}, {$map_id}, {$game_score}, {$player_int}, {$winner});");
