@@ -171,7 +171,7 @@
                 for($j = 0; $j<$this->sizes[$i+1]; $j++) {
                   // var_dump($this->biases[$i]);
                     // var_dump($this->nabla_b[$i][$j][0]);
-                    $this->biases[$i][$j] = ($this->biases[$i][$j]-$eta)*$this->nabla_b[$i][$j][0];
+                    $this->biases[$i][$j] = $this->biases[$i][$j]-($eta*$this->nabla_b[$i][$j][0]);
                 }
             }
 
@@ -179,7 +179,7 @@
                 for($j = 0; $j<$this->sizes[$i+1]; $j++) {
                     for($k = 0; $k<$this->sizes[$i]; $k++){
                       // var_dump($this->nabla_w[$i][$j][$k]);
-                        $this->weights[$i][$j][$k] = ($this->weights[$i][$j][$k]-$eta)*$this->nabla_w[$i][$j][$k];
+                        $this->weights[$i][$j][$k] = $this->weights[$i][$j][$k]-($eta*$this->nabla_w[$i][$j][$k]);
                     }
                 }
             }
