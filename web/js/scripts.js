@@ -70,6 +70,7 @@ Game.prototype.endGame = function() {
     }
 }
 
+
 Game.prototype.startComputer = function() {
   this.saveStartConditions();
   var game = this;
@@ -92,6 +93,7 @@ Game.prototype.startComputer = function() {
     });
 
 }
+
 
 Game.prototype.saveStartConditions = function(){
 
