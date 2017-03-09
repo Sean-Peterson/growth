@@ -9,7 +9,7 @@
         private $champ_score;
         private $tiles;
 
-        function __construct($title, $type, $id = null, $creator_id = null, $champion_id = null, $champ_score = null, $tiles = null)
+        function __construct($title, $type, $id = null, $creator_id = 0, $champion_id = 0, $champ_score = 0, $tiles = null)
         {
             $this->title = (string) $title;
             $this->type = (int) $type;
@@ -95,8 +95,21 @@
             }
         }
 
-        function addUser(){
+        function getGames()
+        {
+            $games = [];
+            $returned_games = $GLOBALS['DB']->query("SELECT * FROM games WHERE map_id = {$this->getId()};");
+            foreach ($returned_games as $game) {
+                $coords = [];
+                $id = $game['id'];
+                $game_coords = $GLOBALS['DB']->query("SELECT * FROM game_history_coordinates WHERE game_id = {$id};");
+                foreach ($game_coords as $tile) {
+                    array_push($coords, [$tile['x'],$tile['y'],$tile['player_int']]);
+                }
 
+                array_push($games, [$coords, $game['winner']]);
+            }
+            return $games;
         }
 
         function getCoordinates()

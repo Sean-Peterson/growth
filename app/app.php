@@ -97,11 +97,18 @@
 
     $app->post('/save_map', function() use ($app){
         //will save map here
-        $map = new Map($_POST['title'], $_POST['type'], 1, 1, 1, 1, $_POST['map']);
+
+        $map = new Map($_POST['title'], $_POST['type'], 0, $_SESSION['user']->getId(), 0, 0, $_POST['map']);
 
         $map->save();
 
         return json_encode($_POST['map']);
+    });
+
+    $app->post('/save_game', function() use($app) {
+        $_SESSION['user']->saveGame($_POST['start_conditions'], $_POST['map_id'], $_POST['winner_score'], $_POST['player_int'], $_POST['winner']);
+
+        return json_encode([$_POST['start_conditions'], $_POST['map_id'], $_POST['winner_score'], $_POST['player_int'], $_POST['winner']]);
     });
 
     $app->get('/load_map', function() use($app) {
@@ -109,8 +116,10 @@
         return $app['twig']->render('all_maps.html.twig', ['maps' => $maps, 'user'=>$_SESSION['user']]);
     });
 
-    $app->get('/play/{id}', function($id) use($app) {
-        return $app['twig']->render('root.html.twig', ['user'=>$_SESSION['user'], 'edit'=>false]);
+
+    $app->get('/play/{type}/{id}', function($id) use($app) {
+
+        return $app['twig']->render('root.html.twig', ['user'=>$_SESSION['user'], 'edit' => false]);
     });
 
     $app->post('/getMap/{id}', function($id) use($app) {
