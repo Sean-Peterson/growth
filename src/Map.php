@@ -9,7 +9,7 @@
         private $champ_score;
         private $tiles;
 
-        function __construct($title, $type, $id = null, $creator_id = null, $champion_id = null, $champ_score = null, $tiles = null)
+        function __construct($title, $type, $id = null, $creator_id = 0, $champion_id = 0, $champ_score = 0, $tiles = null)
         {
             $this->title = (string) $title;
             $this->type = (int) $type;

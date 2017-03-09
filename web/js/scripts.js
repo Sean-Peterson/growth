@@ -189,7 +189,7 @@ Board.prototype.grow = function(game) {
                 // }
                 if(i>0){
                     if(!(this.grid[i-1][j].active)){
-                        if((Math.random()-this.grid[this.grid[i][j].seed[0]][this.grid[i][j].seed[1]].age/100)>.5){
+                        if((Math.random()-this.grid[this.grid[i][j].seed[0]][this.grid[i][j].seed[1]].age/200)>.5){
                             coords.push([i-1,j]);
                             this.grid[i-1][j].player = this.grid[i][j].player;
                             this.grid[i-1][j].seed = this.grid[i][j].seed;
@@ -198,7 +198,7 @@ Board.prototype.grow = function(game) {
                 }
                 if(i<this.x-1){
                     if(!(this.grid[i+1][j].active)){
-                        if((Math.random()-this.grid[this.grid[i][j].seed[0]][this.grid[i][j].seed[1]].age/100)>.5){
+                        if((Math.random()-this.grid[this.grid[i][j].seed[0]][this.grid[i][j].seed[1]].age/200)>.5){
                             coords.push([i+1,j]);
                             this.grid[i+1][j].player = this.grid[i][j].player;
                             this.grid[i+1][j].seed = this.grid[i][j].seed;
@@ -207,7 +207,7 @@ Board.prototype.grow = function(game) {
                 }
                 if(j>0){
                     if(!(this.grid[i][j-1].active)){
-                        if((Math.random()-this.grid[this.grid[i][j].seed[0]][this.grid[i][j].seed[1]].age/100)>.5){
+                        if((Math.random()-this.grid[this.grid[i][j].seed[0]][this.grid[i][j].seed[1]].age/200)>.5){
                             coords.push([i,j-1]);
                             this.grid[i][j-1].player = this.grid[i][j].player;
                             this.grid[i][j-1].seed = this.grid[i][j].seed;
@@ -216,7 +216,7 @@ Board.prototype.grow = function(game) {
                 }
                 if(j<this.y-1){
                     if(!(this.grid[i][j+1].active)){
-                        if((Math.random()-this.grid[this.grid[i][j].seed[0]][this.grid[i][j].seed[1]].age/100)>.5){
+                        if((Math.random()-this.grid[this.grid[i][j].seed[0]][this.grid[i][j].seed[1]].age/200)>.5){
                             coords.push([i,j+1]);
                             this.grid[i][j+1].player = this.grid[i][j].player;
                             this.grid[i][j+1].seed = this.grid[i][j].seed;

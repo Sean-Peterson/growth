@@ -17,7 +17,17 @@
             <h1>Growth</h1>
             <a href='/load_map'><button class='btn btn-primary' type='button'>Maps</button></a>
             <a href='/'><button class='btn btn-primary' type='button'>Home</button></a>
-            <a href='/create_map'><button class='btn btn-primary'>Create Map</button></a>
+
+            {% if user is not empty %}
+            <a href='/create_map'>
+            {% endif %}
+                <button class='btn btn-primary' {% if user is empty %} disabled {% endif %}>Create Map</button>
+            {% if user is not empty %}
+            </a>
+            {% endif %}
+
+
+
             <div class="user">
                 {% if user is not empty %}
                 <h4>{{ user.getName }}<h4>

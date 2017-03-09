@@ -71,7 +71,8 @@
 
     $app->post('/save_map', function() use ($app){
         //will save map here
-        $map = new Map($_POST['title'], $_POST['type'], 1, 1, 1, 1, $_POST['map']);
+
+        $map = new Map($_POST['title'], $_POST['type'], 0, $_SESSION['user']->getId(), 0, 0, $_POST['map']);
 
         $map->save();
 
@@ -84,7 +85,7 @@
     });
 
     $app->get('/play/{id}', function($id) use($app) {
-        return $app['twig']->render('root.html.twig', ['user'=>$_SESSION['user']]);
+        return $app['twig']->render('root.html.twig', ['user'=>$_SESSION['user'], 'edit' => false]);
     });
 
     $app->post('/getMap/{id}', function($id) use($app) {
